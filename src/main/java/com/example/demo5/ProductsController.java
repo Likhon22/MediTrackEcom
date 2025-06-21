@@ -5,9 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -15,7 +14,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
@@ -25,16 +23,16 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ResourceBundle;
 
-public class HomeController implements Initializable, DataReceiver {
+public class ProductsController implements Initializable, DataReceiver {
 
     @FXML
     private BorderPane mainBorderPane;
 
     @FXML
-    private FlowPane medicinesContainer;
+    private FlowPane productsContainer;
 
     @FXML
-    private Button viewAllBtn;
+    private TextField searchField;
 
     private NavbarController navbarController;
     private Connection connect;
@@ -61,25 +59,25 @@ public class HomeController implements Initializable, DataReceiver {
             }
 
             // Highlight the current page in the navbar
-            navbarController.highlightActivePage("home");
+            navbarController.highlightActivePage("products");
 
-            // Load last 5 products
-            loadLatestProducts();
+            // Load all products
+            loadAllProducts();
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error initializing navbar: " + e.getMessage());
+            System.out.println("Error initializing products page: " + e.getMessage());
         }
     }
 
-    private void loadLatestProducts() {
+    private void loadAllProducts() {
         connect = database.connectDb();
 
         try {
-            medicinesContainer.getChildren().clear();
+            productsContainer.getChildren().clear();
 
-            // Query to get the last 5 added products ordered by ID descending
-            String sql = "SELECT * FROM medicine ORDER BY id DESC LIMIT 5";
+            // Get all available products ordered by ID
+            String sql = "SELECT * FROM medicine ORDER BY medicine_id ASC";
             prepare = connect.prepareStatement(sql);
             result = prepare.executeQuery();
 
@@ -93,12 +91,63 @@ public class HomeController implements Initializable, DataReceiver {
                     result.getString("status")
                 );
 
-                medicinesContainer.getChildren().add(productBox);
+                productsContainer.getChildren().add(productBox);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error loading latest products: " + e.getMessage());
+            System.out.println("Error loading products: " + e.getMessage());
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (prepare != null) prepare.close();
+                if (connect != null) connect.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    private void searchProducts() {
+        String searchText = searchField.getText().toLowerCase();
+
+        if (searchText.isEmpty()) {
+            loadAllProducts();
+            return;
+        }
+
+        connect = database.connectDb();
+
+        try {
+            productsContainer.getChildren().clear();
+
+            // Search products by name, brand, or type
+            String sql = "SELECT * FROM medicine WHERE LOWER(productName) LIKE ? OR LOWER(brand) LIKE ? OR LOWER(type) LIKE ?";
+            prepare = connect.prepareStatement(sql);
+            String searchParam = "%" + searchText + "%";
+            prepare.setString(1, searchParam);
+            prepare.setString(2, searchParam);
+            prepare.setString(3, searchParam);
+
+            result = prepare.executeQuery();
+
+            while (result.next()) {
+                VBox productBox = createProductBox(
+                    result.getInt("medicine_id"),
+                    result.getString("brand"),
+                    result.getString("productName"),
+                    result.getDouble("price"),
+                    result.getString("image"),
+                    result.getString("status")
+                );
+
+                productsContainer.getChildren().add(productBox);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error searching products: " + e.getMessage());
         } finally {
             try {
                 if (result != null) result.close();
@@ -159,19 +208,8 @@ public class HomeController implements Initializable, DataReceiver {
         return productBox;
     }
 
-    @FXML
-    private void navigateToProducts(ActionEvent event) {
-        // Since products.fxml was deleted, we'll show an info alert instead
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Products");
-        alert.setHeaderText("Coming Soon");
-        alert.setContentText("The Products page is currently under construction. Please check back later!");
-        alert.showAndWait();
-    }
-
     @Override
     public void receiveData(Object data) {
         // Handle any data passed to this controller
     }
 }
-
