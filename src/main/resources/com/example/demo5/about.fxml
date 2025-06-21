@@ -1,1 +1,230 @@
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo5.AboutController">
+   <top>
+      <!-- Navbar will be loaded dynamically in controller -->
+   </top>
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f5f5f5;" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="620.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <padding>
+                  <Insets top="80.0" />
+               </padding>
+               <children>
+                  <Label alignment="CENTER" prefHeight="70.0" prefWidth="347.0" text="About MediTrack" textFill="#449b6d">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <ScrollPane fitToWidth="true" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: transparent;">
+                     <content>
+                        <VBox alignment="TOP_CENTER" spacing="20.0">
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
+                           </padding>
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="220.0" prefWidth="980.0" spacing="30.0">
+                                 <children>
+                                    <ImageView fitHeight="200.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../images/doctor.png" />
+                                       </image>
+                                    </ImageView>
+                                    <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="550.0" spacing="15.0">
+                                       <children>
+                                          <Label text="Your Health, Our Priority" textFill="#633364">
+                                             <font>
+                                                <Font name="System Bold" size="20.0" />
+                                             </font>
+                                          </Label>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="MediTrack is a modern pharmacy committed to providing high-quality healthcare products and services to our community. Founded in 2020, we've been delivering reliable, affordable medications to customers worldwide." wrappingWidth="550.0">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Our team of experienced pharmacists is dedicated to ensuring you receive the right medications with proper guidance on their usage. We believe in building a healthier community through accessible healthcare solutions." wrappingWidth="550.0">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <VBox alignment="TOP_CENTER" prefHeight="280.0" prefWidth="980.0" spacing="15.0">
+                                 <children>
+                                    <Label text="Our Services" textFill="#449b6d">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER" prefHeight="80.0" prefWidth="980.0" spacing="40.0">
+                                       <children>
+                                          <VBox alignment="TOP_CENTER" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: white; -fx-background-radius: 10px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 10);">
+                                             <children>
+                                                <Label text="Prescription Filling" textFill="#633364">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quick and accurate filling of prescriptions with options for home delivery." textAlignment="CENTER" wrappingWidth="280.0">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </padding>
+                                          </VBox>
+                                          <VBox alignment="TOP_CENTER" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: white; -fx-background-radius: 10px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 10);">
+                                             <children>
+                                                <Label text="Health Consultations" textFill="#633364">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Free consultations with our experienced pharmacists for medication guidance." textAlignment="CENTER" wrappingWidth="280.0">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </padding>
+                                          </VBox>
+                                          <VBox alignment="TOP_CENTER" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: white; -fx-background-radius: 10px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 10);">
+                                             <children>
+                                                <Label text="Health Products" textFill="#633364">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Wide range of wellness and healthcare products alongside medications." textAlignment="CENTER" wrappingWidth="280.0">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </padding>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" layoutX="20.0" layoutY="45.0" prefHeight="80.0" prefWidth="980.0" spacing="40.0">
+                                       <children>
+                                          <VBox alignment="TOP_CENTER" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: white; -fx-background-radius: 10px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 10);">
+                                             <children>
+                                                <Label text="Health Monitoring" textFill="#633364">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Regular health checks including blood pressure, glucose levels, and cholesterol." textAlignment="CENTER" wrappingWidth="280.0">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </padding>
+                                          </VBox>
+                                          <VBox alignment="TOP_CENTER" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: white; -fx-background-radius: 10px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 10);">
+                                             <children>
+                                                <Label text="Medication Management" textFill="#633364">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Assistance with managing complex medication schedules for chronic conditions." textAlignment="CENTER" wrappingWidth="280.0">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </padding>
+                                          </VBox>
+                                          <VBox alignment="TOP_CENTER" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: white; -fx-background-radius: 10px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 10);">
+                                             <children>
+                                                <Label text="Online Services" textFill="#633364">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Easy online ordering, prescription refills, and virtual consultations." textAlignment="CENTER" wrappingWidth="280.0">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </padding>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="980.0" spacing="10.0">
+                                 <children>
+                                    <Label text="Contact Us" textFill="#449b6d">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="📍 123 Health Street, Medical District, City" textAlignment="CENTER" wrappingWidth="980.0">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                    <Text layoutX="20.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="📞 +1 (555) 123-4567" textAlignment="CENTER" wrappingWidth="980.0">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                    <Text layoutX="20.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="✉️ contact@meditrack.com" textAlignment="CENTER" wrappingWidth="980.0">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                     </content>
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" />
+                     </VBox.margin>
+                  </ScrollPane>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

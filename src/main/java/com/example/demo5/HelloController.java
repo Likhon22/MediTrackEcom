@@ -106,19 +106,36 @@ public class HelloController implements Initializable {
 
             if (result.next()) {
                 getData.username = username.getText();
+                // Store the is_admin value to determine user role
+                getData.isAdmin = result.getBoolean("is_admin");
+
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Information Message");
                 alert.setHeaderText(null);
                 alert.setContentText("Successfully Login");
                 alert.showAndWait();
-                loginbtn.getScene().getWindow().hide();
-                Parent root = FXMLLoader.load(getClass().getResource("dashboard.fxml"));
-                Stage stage = new Stage();
-                stage.setResizable(false);
-                Scene scene = new Scene(root);
 
-                stage.setScene(scene);
-                stage.show();
+                loginbtn.getScene().getWindow().hide();
+
+                // Decide where to navigate based on is_admin value
+                if (getData.isAdmin) {
+                    // Admin user - go to dashboard
+                    Parent root = FXMLLoader.load(getClass().getResource("dashboard.fxml"));
+                    Stage stage = new Stage();
+                    stage.setResizable(false);
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+                } else {
+                    // Regular user - go to home page
+                    Parent root = FXMLLoader.load(getClass().getResource("home.fxml"));
+                    Stage stage = new Stage();
+                    stage.setResizable(false);
+                    Scene scene = new Scene(root);
+                    stage.setTitle("MediTrack - Home");
+                    stage.setScene(scene);
+                    stage.show();
+                }
 
             } else {
                 alert = new Alert(Alert.AlertType.ERROR);
@@ -220,9 +237,4 @@ public class HelloController implements Initializable {
         System.exit(0);
     }
 }
-
-
-
-
-
 

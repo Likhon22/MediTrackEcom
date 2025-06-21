@@ -40,7 +40,6 @@ public class NavbarController implements Initializable {
     private Button logoutBtn;
 
     private boolean isLoggedIn = false;
-    private boolean isAdmin = false;
     private String currentPage = "home";
 
     // Keep track of all navigation buttons for styling
@@ -79,7 +78,7 @@ public class NavbarController implements Initializable {
      * Update navigation based on login status and user role
      */
     public void updateNavigation() {
-        System.out.println("Updating navigation - isLoggedIn: " + isLoggedIn + ", isAdmin: " + isAdmin);
+        System.out.println("Updating navigation - isLoggedIn: " + isLoggedIn + ", isAdmin: " + getData.isAdmin);
 
         if (isLoggedIn) {
             // When logged in, show logout instead of login/signup
@@ -88,9 +87,11 @@ public class NavbarController implements Initializable {
             logoutBtn.setVisible(true);
 
             // If admin, show dashboard button
-            if (isAdmin) {
+            if (getData.isAdmin) {
                 dashboardBtn.setVisible(true);
                 dashboardBtn.setStyle(DASHBOARD_BUTTON_STYLE);
+            } else {
+                dashboardBtn.setVisible(false);
             }
         } else {
             // When not logged in, show login/signup
@@ -129,7 +130,7 @@ public class NavbarController implements Initializable {
      */
     public void setAdminStatus(boolean isAdmin) {
         System.out.println("Setting admin status: " + isAdmin);
-        this.isAdmin = isAdmin;
+        getData.isAdmin = isAdmin;
         updateNavigation();
     }
 
@@ -183,7 +184,7 @@ public class NavbarController implements Initializable {
         // Clear user data
         getData.username = null;
         isLoggedIn = false;
-        isAdmin = false;
+        getData.isAdmin = false;
 
         // Update navigation
         updateNavigation();
