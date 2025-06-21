@@ -161,12 +161,8 @@ public class HomeController implements Initializable, DataReceiver {
 
     @FXML
     private void navigateToProducts(ActionEvent event) {
-        // Since products.fxml was deleted, we'll show an info alert instead
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Products");
-        alert.setHeaderText("Coming Soon");
-        alert.setContentText("The Products page is currently under construction. Please check back later!");
-        alert.showAndWait();
+        Stage stage = (Stage) mainBorderPane.getScene().getWindow();
+        SceneSwitcher.switchScene(stage, "products.fxml", "MediTrack - Products", false, null);
     }
 
     @Override

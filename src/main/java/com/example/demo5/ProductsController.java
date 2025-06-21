@@ -11,7 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
@@ -21,6 +21,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ProductsController implements Initializable, DataReceiver {
@@ -29,7 +31,7 @@ public class ProductsController implements Initializable, DataReceiver {
     private BorderPane mainBorderPane;
 
     @FXML
-    private FlowPane productsContainer;
+    private GridPane productsContainer;
 
     @FXML
     private TextField searchField;
@@ -81,6 +83,8 @@ public class ProductsController implements Initializable, DataReceiver {
             prepare = connect.prepareStatement(sql);
             result = prepare.executeQuery();
 
+            // Store products in a list first
+            List<VBox> productBoxes = new ArrayList<>();
             while (result.next()) {
                 VBox productBox = createProductBox(
                     result.getInt("medicine_id"),
@@ -91,7 +95,20 @@ public class ProductsController implements Initializable, DataReceiver {
                     result.getString("status")
                 );
 
-                productsContainer.getChildren().add(productBox);
+                productBoxes.add(productBox);
+            }
+
+            // Add products to grid (3 columns)
+            int column = 0;
+            int row = 0;
+            for (VBox productBox : productBoxes) {
+                productsContainer.add(productBox, column, row);
+
+                column++;
+                if (column == 3) { // After 3 columns, move to next row
+                    column = 0;
+                    row++;
+                }
             }
 
         } catch (Exception e) {
@@ -132,6 +149,8 @@ public class ProductsController implements Initializable, DataReceiver {
 
             result = prepare.executeQuery();
 
+            // Store products in a list first
+            List<VBox> productBoxes = new ArrayList<>();
             while (result.next()) {
                 VBox productBox = createProductBox(
                     result.getInt("medicine_id"),
@@ -142,7 +161,20 @@ public class ProductsController implements Initializable, DataReceiver {
                     result.getString("status")
                 );
 
-                productsContainer.getChildren().add(productBox);
+                productBoxes.add(productBox);
+            }
+
+            // Add products to grid (3 columns)
+            int column = 0;
+            int row = 0;
+            for (VBox productBox : productBoxes) {
+                productsContainer.add(productBox, column, row);
+
+                column++;
+                if (column == 3) { // After 3 columns, move to next row
+                    column = 0;
+                    row++;
+                }
             }
 
         } catch (Exception e) {
@@ -161,11 +193,11 @@ public class ProductsController implements Initializable, DataReceiver {
 
     private VBox createProductBox(int id, String brand, String productName, double price, String imagePath, String status) {
         VBox productBox = new VBox();
-        productBox.setPrefWidth(170);
-        productBox.setPrefHeight(230);
+        productBox.setPrefWidth(250);
+        productBox.setPrefHeight(250);
         productBox.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 10);");
-        productBox.setPadding(new Insets(10));
-        productBox.setSpacing(5);
+        productBox.setPadding(new Insets(15));
+        productBox.setSpacing(8);
 
         ImageView imageView = new ImageView();
         try {
@@ -173,28 +205,30 @@ public class ProductsController implements Initializable, DataReceiver {
             if (imagePath != null && !imagePath.isEmpty()) {
                 File file = new File(imagePath);
                 if (file.exists()) {
-                    image = new Image(file.toURI().toString(), 150, 120, true, true);
+                    image = new Image(file.toURI().toString(), 180, 140, true, true);
                 } else {
                     // Default image if file doesn't exist
-                    image = new Image(getClass().getResourceAsStream("/images/m.png"), 150, 120, true, true);
+                    image = new Image(getClass().getResourceAsStream("/images/m.png"), 180, 140, true, true);
                 }
             } else {
                 // Default image if path is null or empty
-                image = new Image(getClass().getResourceAsStream("/images/m.png"), 150, 120, true, true);
+                image = new Image(getClass().getResourceAsStream("/images/m.png"), 180, 140, true, true);
             }
             imageView.setImage(image);
-            imageView.setFitWidth(150);
-            imageView.setFitHeight(120);
+            imageView.setFitWidth(180);
+            imageView.setFitHeight(140);
+            imageView.setPreserveRatio(true);
         } catch (Exception e) {
             System.out.println("Error loading image: " + e.getMessage());
         }
 
         Label nameLabel = new Label(productName);
-        nameLabel.setFont(Font.font("System", 14));
+        nameLabel.setFont(Font.font("System", 16));
         nameLabel.setWrapText(true);
 
         Label brandLabel = new Label(brand);
         brandLabel.setStyle("-fx-text-fill: #666666;");
+        brandLabel.setFont(Font.font("System", 14));
 
         Label priceLabel = new Label(String.format("$%.2f", price));
         priceLabel.setStyle("-fx-text-fill: #449b6d; -fx-font-weight: bold;");

@@ -171,12 +171,8 @@ public class NavbarController implements Initializable {
     @FXML
     private void navigateToProducts(ActionEvent event) {
         highlightActivePage("products");
-        // Since products.fxml was deleted, show an info alert instead
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Products");
-        alert.setHeaderText("Coming Soon");
-        alert.setContentText("The Products page is currently under construction. Please check back later!");
-        alert.showAndWait();
+        Stage stage = (Stage) navbar.getScene().getWindow();
+        SceneSwitcher.switchScene(stage, "products.fxml", "MediTrack - Products", false, null);
     }
 
     @FXML
