@@ -41,8 +41,16 @@ public class SceneSwitcher {
                 }
             }
 
-            // Create scene with fixed dimensions of 1400x900
-            Scene scene = new Scene(root, 1400, 900);
+            // Set scene dimensions based on the page type
+            Scene scene;
+
+            // Login/signup page should be smaller (700x1000)
+            if (fxmlPath.equals("hello-view.fxml")) {
+                scene = new Scene(root, 1000, 700);
+            } else {
+                // All other pages use the regular size (1400x900)
+                scene = new Scene(root, 1200, 800);
+            }
 
             // Use the existing stage
             currentStage.setTitle(title);
@@ -84,8 +92,17 @@ public class SceneSwitcher {
                 stage.initStyle(stageStyle);
             }
 
-            // Create scene with fixed dimensions of 1400x900
-            Scene scene = new Scene(root, 1400, 900);
+            // Set scene dimensions based on the page type
+            Scene scene;
+
+            // Login/signup page should be smaller (700x1000)
+            if (fxmlPath.equals("hello-view.fxml")) {
+                scene = new Scene(root, 1000, 700);
+            } else {
+                // All other pages use the regular size (1400x900)
+                scene = new Scene(root, 1400, 900);
+            }
+
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {

@@ -23,12 +23,12 @@
             <VBox alignment="TOP_CENTER" prefWidth="980.0" spacing="20.0" style="-fx-background-color: #f5f5f5;">
                <children>
                   <!-- Page Title -->
-                  <Label alignment="CENTER" prefHeight="70.0" prefWidth="347.0" text="Shopping Cart" textFill="#449b6d">
+                  <Label alignment="CENTER" prefHeight="30.0" prefWidth="347.0" text="Shopping Cart" textFill="#449b6d">
                      <font>
-                        <Font name="System Bold" size="30.0" />
+                        <Font name="System Bold" size="24.0" />
                      </font>
                      <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets top="5.0" bottom="0.0" />
                      </VBox.margin>
                   </Label>
 
@@ -52,12 +52,12 @@
                         </Button>
                      </children>
                      <VBox.margin>
-                        <Insets bottom="20.0" top="50.0" />
+                        <Insets bottom="20.0" top="30.0" />
                      </VBox.margin>
                   </VBox>
 
                   <!-- Cart Content -->
-                  <HBox fx:id="cartContentArea" prefWidth="980.0" spacing="20.0" visible="false">
+                  <HBox fx:id="cartContentArea" alignment="CENTER" prefWidth="980.0" spacing="20.0" visible="false">
                      <children>
                         <!-- Cart Items -->
                         <VBox prefHeight="450.0" prefWidth="650.0" spacing="10.0">
