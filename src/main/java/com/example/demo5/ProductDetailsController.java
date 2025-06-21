@@ -427,19 +427,63 @@ public class ProductDetailsController implements Initializable, DataReceiver {
 
         int quantity = quantitySpinner.getValue();
 
-        // In a real application, you would save this to a cart database table
-        // For now, we'll just show a success message and fade it out
-        addToCartMessage.setVisible(true);
+        // Add to cart database
+        try {
+            connect = database.connectDb();
 
-        // Create fade out animation for message
-        PauseTransition pause = new PauseTransition(Duration.seconds(2));
-        pause.setOnFinished(e -> {
-            FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), addToCartMessage);
-            fadeOut.setFromValue(1.0);
-            fadeOut.setToValue(0.0);
-            fadeOut.play();
-        });
-        pause.play();
+            // Check if this medicine is already in the user's cart
+            String checkSql = "SELECT * FROM cart WHERE user_id = ? AND medicine_id = ?";
+            prepare = connect.prepareStatement(checkSql);
+            prepare.setString(1, getData.username);
+            prepare.setInt(2, medicineId);
+            result = prepare.executeQuery();
+
+            if (result.next()) {
+                // Item already in cart, update quantity
+                int existingQuantity = result.getInt("quantity");
+                int newQuantity = existingQuantity + quantity;
+
+                String updateSql = "UPDATE cart SET quantity = ? WHERE user_id = ? AND medicine_id = ?";
+                prepare = connect.prepareStatement(updateSql);
+                prepare.setInt(1, newQuantity);
+                prepare.setString(2, getData.username);
+                prepare.setInt(3, medicineId);
+                prepare.executeUpdate();
+            } else {
+                // Add new item to cart
+                String insertSql = "INSERT INTO cart (user_id, medicine_id, quantity) VALUES (?, ?, ?)";
+                prepare = connect.prepareStatement(insertSql);
+                prepare.setString(1, getData.username);
+                prepare.setInt(2, medicineId);
+                prepare.setInt(3, quantity);
+                prepare.executeUpdate();
+            }
+
+            // Show success message and fade it out
+            addToCartMessage.setVisible(true);
+
+            // Create fade out animation for message
+            PauseTransition pause = new PauseTransition(Duration.seconds(2));
+            pause.setOnFinished(e -> {
+                FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), addToCartMessage);
+                fadeOut.setFromValue(1.0);
+                fadeOut.setToValue(0.0);
+                fadeOut.play();
+            });
+            pause.play();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error adding to cart: " + e.getMessage());
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (prepare != null) prepare.close();
+                if (connect != null) connect.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         // Log the action for debugging
         System.out.println("Added to cart: Product ID: " + medicineId +

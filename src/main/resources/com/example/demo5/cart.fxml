@@ -1,0 +1,307 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo5.CartController">
+   <!-- Navbar will be loaded programmatically in the controller -->
+   <center>
+      <ScrollPane fitToWidth="true" pannable="true" prefViewportHeight="620.0" prefViewportWidth="1000.0" BorderPane.alignment="CENTER">
+         <content>
+            <VBox alignment="TOP_CENTER" prefWidth="980.0" spacing="20.0" style="-fx-background-color: #f5f5f5;">
+               <children>
+                  <!-- Page Title -->
+                  <Label alignment="CENTER" prefHeight="70.0" prefWidth="347.0" text="Shopping Cart" textFill="#449b6d">
+                     <font>
+                        <Font name="System Bold" size="30.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+
+                  <!-- Empty Cart Message -->
+                  <VBox fx:id="emptyCartMessage" alignment="CENTER" prefHeight="200.0" prefWidth="980.0" spacing="20.0">
+                     <children>
+                        <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../images/m.png" />
+                           </image>
+                        </ImageView>
+                        <Label text="Your cart is empty" textFill="#636e72">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Button mnemonicParsing="false" onAction="#navigateToProducts" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: linear-gradient(to right, #449b6d, #633364); -fx-text-fill: white; -fx-background-radius: 20;" text="Browse Products">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="20.0" top="50.0" />
+                     </VBox.margin>
+                  </VBox>
+
+                  <!-- Cart Content -->
+                  <HBox fx:id="cartContentArea" prefWidth="980.0" spacing="20.0" visible="false">
+                     <children>
+                        <!-- Cart Items -->
+                        <VBox prefHeight="450.0" prefWidth="650.0" spacing="10.0">
+                           <children>
+                              <Label text="Cart Items" textFill="#633364">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <TableView fx:id="cartTableView" prefHeight="400.0" prefWidth="650.0" style="-fx-background-radius: 5;">
+                                 <columns>
+                                    <TableColumn fx:id="productImageCol" prefWidth="100.0" text="Product" />
+                                    <TableColumn fx:id="productNameCol" prefWidth="200.0" text="Name" />
+                                    <TableColumn fx:id="productPriceCol" prefWidth="100.0" text="Price" />
+                                    <TableColumn fx:id="productQuantityCol" prefWidth="100.0" text="Quantity" />
+                                    <TableColumn fx:id="productTotalCol" prefWidth="100.0" text="Total" />
+                                    <TableColumn fx:id="actionCol" prefWidth="50.0" text="Action" />
+                                 </columns>
+                              </TableView>
+                           </children>
+                        </VBox>
+
+                        <!-- Order Summary -->
+                        <VBox prefHeight="450.0" prefWidth="300.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 10);">
+                           <children>
+                              <Label text="Order Summary" textFill="#633364">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="10.0" top="15.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Rectangle fill="#e0e0e0" height="1.0" stroke="TRANSPARENT" strokeType="INSIDE" width="300.0">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </Rectangle>
+
+                              <!-- Subtotal -->
+                              <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0">
+                                 <children>
+                                    <Label prefWidth="150.0" text="Subtotal:" textFill="#636e72">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Label fx:id="subtotalLabel" text="\$0.00" textFill="#636e72">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+
+                              <!-- Tax -->
+                              <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0">
+                                 <children>
+                                    <Label prefWidth="150.0" text="Tax (5%):" textFill="#636e72">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Label fx:id="taxLabel" text="\$0.00" textFill="#636e72">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+
+                              <!-- Shipping -->
+                              <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0">
+                                 <children>
+                                    <Label prefWidth="150.0" text="Shipping:" textFill="#636e72">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Label fx:id="shippingLabel" text="\$5.00" textFill="#636e72">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+
+                              <Rectangle fill="#e0e0e0" height="1.0" stroke="TRANSPARENT" strokeType="INSIDE" width="300.0">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </Rectangle>
+
+                              <!-- Total -->
+                              <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0">
+                                 <children>
+                                    <Label prefWidth="150.0" text="Total:" textFill="#449b6d">
+                                       <font>
+                                          <Font name="System Bold" size="18.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Label fx:id="totalLabel" text="\$0.00" textFill="#449b6d">
+                                       <font>
+                                          <Font name="System Bold" size="18.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+
+                              <Button fx:id="checkoutButton" mnemonicParsing="false" onAction="#checkout" prefHeight="50.0" prefWidth="280.0" style="-fx-background-color: linear-gradient(to right, #449b6d, #633364); -fx-text-fill: white; -fx-background-radius: 25; -fx-cursor: hand;" text="Proceed to Checkout">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="10.0" right="10.0" top="40.0" />
+                                 </VBox.margin>
+                              </Button>
+
+                              <Button fx:id="continueShoppingButton" mnemonicParsing="false" onAction="#navigateToProducts" prefHeight="40.0" prefWidth="280.0" style="-fx-background-color: transparent; -fx-text-fill: #633364; -fx-border-color: #633364; -fx-border-radius: 20; -fx-cursor: hand;" text="Continue Shopping">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="10.0" right="10.0" top="10.0" />
+                                 </VBox.margin>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </HBox>
+
+                  <!-- Footer Section -->
+                  <HBox alignment="CENTER" prefHeight="120.0" prefWidth="980.0" style="-fx-background-color: linear-gradient(to right, #449b6d, #633364);">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="120.0" prefWidth="300.0">
+                           <children>
+                              <Label text="MediTrack" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Your health, our priority" textFill="WHITE">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../images/stetho.png" />
+                                 </image>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                           </children>
+                        </VBox>
+
+                        <Region prefHeight="120.0" prefWidth="40.0" />
+
+                        <VBox alignment="CENTER" prefHeight="120.0" prefWidth="300.0">
+                           <children>
+                              <Label text="Quick Links" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Hyperlink onAction="#navigateToHome" style="-fx-text-fill: #ffffff;" text="Home" />
+                              <Hyperlink onAction="#navigateToProducts" style="-fx-text-fill: #ffffff;" text="Products" />
+                              <Hyperlink onAction="#navigateToAbout" style="-fx-text-fill: #ffffff;" text="About" />
+                           </children>
+                        </VBox>
+
+                        <Region prefHeight="120.0" prefWidth="40.0" />
+
+                        <VBox alignment="CENTER" prefHeight="120.0" prefWidth="300.0">
+                           <children>
+                              <Label text="Contact Us" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Label text="Email: contact@meditrack.com" textFill="WHITE">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Phone: +1 (555) 123-4567" textFill="WHITE">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Address: 123 Health Street" textFill="WHITE">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </HBox>
+
+                  <!-- Copyright Section -->
+                  <HBox alignment="CENTER" prefHeight="40.0" prefWidth="980.0" style="-fx-background-color: #2c3e50;">
+                     <children>
+                        <Label text="© 2025 MediTrack. All Rights Reserved." textFill="WHITE">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="0.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </center>
+</BorderPane>
