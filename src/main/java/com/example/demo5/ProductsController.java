@@ -14,6 +14,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
@@ -240,6 +241,18 @@ public class ProductsController implements Initializable, DataReceiver {
         productBox.getChildren().addAll(imageView, nameLabel, brandLabel, priceLabel, statusLabel);
 
         return productBox;
+    }
+
+    @FXML
+    private void navigateToHome(ActionEvent event) {
+        Stage stage = (Stage) mainBorderPane.getScene().getWindow();
+        SceneSwitcher.switchScene(stage, "home.fxml", "MediTrack - Home", false, null);
+    }
+
+    @FXML
+    private void navigateToAbout(ActionEvent event) {
+        Stage stage = (Stage) mainBorderPane.getScene().getWindow();
+        SceneSwitcher.switchScene(stage, "about.fxml", "MediTrack - About", false, null);
     }
 
     @Override

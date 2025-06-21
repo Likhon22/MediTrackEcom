@@ -1,10 +1,12 @@
 package com.example.demo5;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -41,6 +43,18 @@ public class AboutController implements Initializable, DataReceiver {
             e.printStackTrace();
             System.out.println("Error initializing navbar: " + e.getMessage());
         }
+    }
+
+    @FXML
+    private void navigateToHome(ActionEvent event) {
+        Stage stage = (Stage) mainBorderPane.getScene().getWindow();
+        SceneSwitcher.switchScene(stage, "home.fxml", "MediTrack - Home", false, null);
+    }
+
+    @FXML
+    private void navigateToProducts(ActionEvent event) {
+        Stage stage = (Stage) mainBorderPane.getScene().getWindow();
+        SceneSwitcher.switchScene(stage, "products.fxml", "MediTrack - Products", false, null);
     }
 
     @Override

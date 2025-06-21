@@ -165,6 +165,18 @@ public class HomeController implements Initializable, DataReceiver {
         SceneSwitcher.switchScene(stage, "products.fxml", "MediTrack - Products", false, null);
     }
 
+    @FXML
+    private void navigateToHome(ActionEvent event) {
+        Stage stage = (Stage) mainBorderPane.getScene().getWindow();
+        SceneSwitcher.switchScene(stage, "home.fxml", "MediTrack - Home", false, null);
+    }
+
+    @FXML
+    private void navigateToAbout(ActionEvent event) {
+        Stage stage = (Stage) mainBorderPane.getScene().getWindow();
+        SceneSwitcher.switchScene(stage, "about.fxml", "MediTrack - About", false, null);
+    }
+
     @Override
     public void receiveData(Object data) {
         // Handle any data passed to this controller
