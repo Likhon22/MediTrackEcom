@@ -9,8 +9,8 @@ public class database {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             Connection connect = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3307/pharmacy?useSSL=false&serverTimezone=UTC",
-                    "root", "");
+                    "jdbc:mysql://localhost:3306/pharmacy",
+                    "root", "likhon12");
 
             return connect;
         } catch (Exception e) {

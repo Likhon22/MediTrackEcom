@@ -216,6 +216,93 @@ public class dashboardController implements Initializable {
     private ResultSet result;
     private Image image;
 
+
+    public void homeChart(){
+        dashboard_chart.getData().clear();
+
+        String sql = "SELECT date, SUM(total) FROM customer_info"
+                + " GROUP BY date ORDER BY TIMESTAMP(date) ASC LIMIT 9";
+
+        connect = database.connectDb();
+
+        try{
+            XYChart.Series chart = new XYChart.Series();
+
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+
+            while(result.next()){
+                chart.getData().add(new XYChart.Data(result.getString(1), result.getInt(2)));
+            }
+
+            dashboard_chart.getData().add(chart);
+
+        }catch(Exception e){e.printStackTrace();}
+
+    }
+
+    public void homeAM(){
+        String sql = "SELECT COUNT(id) AS total FROM medicine WHERE status='Available'";
+        connect = database.connectDb();
+        int countAM = 0;
+        try {
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+
+            if (result.next()) {
+                countAM = result.getInt("total");
+            }
+
+            dashboard_availableMed.setText(String.valueOf(countAM));
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Exception Caught");
+            alert.setHeaderText(null);
+            alert.setContentText("Error: " + e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+    public void homeTI(){
+        String sql = "SELECT SUM(total) FROM customer_info";
+
+        connect = database.connectDb();
+        double totalDisplay = 0;
+        try{
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+
+            while(result.next()){
+                totalDisplay = result.getDouble("SUM(total)");
+            }
+
+            dashboard_totalIncome.setText( String.valueOf(totalDisplay));
+
+        }catch(Exception e){e.printStackTrace();}
+
+    }
+    public void homeTC(){
+
+        String sql = "SELECT COUNT(id) FROM customer_info";
+
+        connect = database.connectDb();
+        int countTC = 0;
+
+        try{
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+
+            while(result.next()){
+                countTC = result.getInt("COUNT(id)");
+            }
+
+            dashboard_totalCustomers.setText(String.valueOf(countTC));
+
+        }catch(Exception e){e.printStackTrace();}
+
+    }
     public void addMedicinesAdd() {
         String sql = "INSERT INTO medicine (medicine_id, brand, productName, type, status, price, image, date) "
                 + "VALUES(?,?,?,?,?,?,?,?)";
@@ -602,43 +689,43 @@ public class dashboardController implements Initializable {
     }
 
     private double totalPriceD;
-     public void  purchaseDisplayTotal(){
-         String sql = "SELECT SUM(price) FROM customer WHERE customer_id = '"+customerId+"'";
+    public void  purchaseDisplayTotal(){
+        String sql = "SELECT SUM(price) FROM customer WHERE customer_id = '"+customerId+"'";
 
-         connect = database.connectDb();
+        connect = database.connectDb();
 
-         try{
-             prepare = connect.prepareStatement(sql);
-             result = prepare.executeQuery();
+        try{
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
 
-             if(result.next()){
-                 totalPriceD = result.getDouble("SUM(price)");
-             }
-             purchase_total.setText("৳" + String.valueOf(totalPriceD));
+            if(result.next()){
+                totalPriceD = result.getDouble("SUM(price)");
+            }
+            purchase_total.setText(String.valueOf(totalPriceD));
 
-         }catch(Exception e){e.printStackTrace();}
+        }catch(Exception e){e.printStackTrace();}
 
-     }
+    }
     private double balance;
     private double amount;
-     public void purchaseAmount(){
-         if(purchase_amount.getText().isEmpty() || totalPriceD == 0){
-             Alert alert = new Alert(AlertType.ERROR);
-             alert.setTitle("Error Message");
-             alert.setHeaderText(null);
-             alert.setContentText("Invalid :3");
-             alert.showAndWait();
-         }else {
-             amount = Double.parseDouble(purchase_amount.getText());
-             if (totalPriceD > amount) {
-                 purchase_amount.setText("");
-             } else {
-                 balance = (amount - totalPriceD);
+    public void purchaseAmount(){
+        if(purchase_amount.getText().isEmpty() || totalPriceD == 0){
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Invalid :3");
+            alert.showAndWait();
+        }else {
+            amount = Double.parseDouble(purchase_amount.getText());
+            if (totalPriceD > amount) {
+                purchase_amount.setText("");
+            } else {
+                balance = (amount - totalPriceD);
 
-                 purchase_balance.setText("$" + String.valueOf(balance));
-             }
-         }
-     }
+                purchase_balance.setText(String.valueOf(balance));
+            }
+        }
+    }
 
     public void purchasePay(){
         purchaseCustomerId();
@@ -679,7 +766,7 @@ public class dashboardController implements Initializable {
                     alert.showAndWait();
 
                     purchase_amount.setText("");
-                    purchase_balance.setText("$0.0");
+                    purchase_balance.setText("");
                 }
             }
 
@@ -898,6 +985,10 @@ public class dashboardController implements Initializable {
             dashboard_btn.setStyle("-fx-background-color:linear-gradient(to bottom right, #41b170, #8a418c);");
             addMed_btn.setStyle("-fx-background-color:transparent");
             purchase_btn.setStyle("-fx-background-color:transparent");
+            homeAM();
+            homeTC();
+            homeTI();
+            homeChart();
 
 
         } else if (event.getSource()==addMed_btn){
@@ -979,6 +1070,10 @@ public class dashboardController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        homeChart();
+        homeAM();
+        homeTC();
+        homeTI();
         addMedicineShowListData();
         addMedicineListType();
         addMedicineListStatus();
