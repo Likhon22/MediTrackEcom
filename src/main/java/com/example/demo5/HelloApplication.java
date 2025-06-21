@@ -17,7 +17,7 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         // Load the home page instead of login page as the starting point
         Parent root = FXMLLoader.load(getClass().getResource("home.fxml"));
-        Scene scene = new Scene(root, 1000, 700);
+        Scene scene = new Scene(root, 1400, 900);
 
         stage.setTitle("MediTrack - Home");
         stage.setResizable(false);

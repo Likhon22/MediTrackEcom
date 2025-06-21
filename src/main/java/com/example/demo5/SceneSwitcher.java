@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.net.URL;
 
 public class SceneSwitcher {
 
@@ -23,7 +24,13 @@ public class SceneSwitcher {
     public static void switchScene(Stage currentStage, String fxmlPath, String title,
                                   boolean setResizable, Object userData) {
         try {
-            FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource(fxmlPath));
+            // Get the resource URL first to verify it exists
+            URL fxmlUrl = SceneSwitcher.class.getResource(fxmlPath);
+            if (fxmlUrl == null) {
+                throw new IOException("Cannot find FXML resource: " + fxmlPath);
+            }
+
+            FXMLLoader loader = new FXMLLoader(fxmlUrl);
             Parent root = loader.load();
 
             // Get the controller and set user data if provided
@@ -34,7 +41,8 @@ public class SceneSwitcher {
                 }
             }
 
-            Scene scene = new Scene(root);
+            // Create scene with fixed dimensions of 1400x900
+            Scene scene = new Scene(root, 1400, 900);
 
             // Use the existing stage
             currentStage.setTitle(title);
@@ -44,6 +52,10 @@ public class SceneSwitcher {
         } catch (IOException e) {
             e.printStackTrace();
             showErrorAlert("Navigation Error", "Failed to load the requested page: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorAlert("Unexpected Error", "An unexpected error occurred: " + e.getMessage() +
+                          "\nCheck if all resource paths in FXML files are correct.");
         }
     }
 
@@ -72,7 +84,8 @@ public class SceneSwitcher {
                 stage.initStyle(stageStyle);
             }
 
-            Scene scene = new Scene(root);
+            // Create scene with fixed dimensions of 1400x900
+            Scene scene = new Scene(root, 1400, 900);
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {

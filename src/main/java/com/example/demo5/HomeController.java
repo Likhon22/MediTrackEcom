@@ -131,7 +131,7 @@ public class HomeController implements Initializable, DataReceiver {
         VBox productBox = new VBox();
         productBox.setPrefWidth(250);
         productBox.setPrefHeight(280);
-        productBox.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 10);");
+        productBox.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 10); -fx-cursor: hand;");
         productBox.setPadding(new Insets(15));
         productBox.setSpacing(8);
 
@@ -174,6 +174,13 @@ public class HomeController implements Initializable, DataReceiver {
         statusLabel.setStyle("-fx-text-fill: " + (status.equals("Available") ? "#449b6d" : "#cc0000") + ";");
 
         productBox.getChildren().addAll(imageView, nameLabel, brandLabel, priceLabel, statusLabel);
+
+        // Add click event to navigate to product details
+        final int productId = id;
+        productBox.setOnMouseClicked(event -> {
+            Stage stage = (Stage) mainBorderPane.getScene().getWindow();
+            SceneSwitcher.switchScene(stage, "product_details.fxml", "MediTrack - Product Details", false, productId);
+        });
 
         return productBox;
     }
