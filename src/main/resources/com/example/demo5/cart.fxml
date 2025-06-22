@@ -58,6 +58,9 @@
 
                   <!-- Cart Content -->
                   <HBox fx:id="cartContentArea" alignment="CENTER" prefWidth="980.0" spacing="20.0" visible="false">
+                     <VBox.margin>
+                        <Insets top="10.0" bottom="10.0" />
+                     </VBox.margin>
                      <children>
                         <!-- Cart Items -->
                         <VBox prefHeight="450.0" prefWidth="650.0" spacing="10.0">
@@ -205,9 +208,6 @@
                      <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="0.0" />
                      </padding>
-                     <VBox.margin>
-                        <Insets top="0.0" />
-                     </VBox.margin>
                   </HBox>
 
                   <!-- Footer Section -->
