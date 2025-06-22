@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -23,6 +24,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -37,11 +39,16 @@ public class ProductsController implements Initializable, DataReceiver {
     @FXML
     private TextField searchField;
 
+    @FXML
+    private ComboBox<String> sortComboBox;
+
     private NavbarController navbarController;
     private Connection connect;
     private PreparedStatement prepare;
     private Statement statement;
     private ResultSet result;
+
+    private List<ProductItem> currentProducts = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -64,6 +71,9 @@ public class ProductsController implements Initializable, DataReceiver {
             // Highlight the current page in the navbar
             navbarController.highlightActivePage("products");
 
+            // Initialize the sort combo box
+            initSortComboBox();
+
             // Load all products
             loadAllProducts();
 
@@ -73,11 +83,37 @@ public class ProductsController implements Initializable, DataReceiver {
         }
     }
 
+    private void initSortComboBox() {
+        sortComboBox.getItems().addAll(
+            "Default",
+            "Price: Low to High",
+            "Price: High to Low"
+        );
+        sortComboBox.setValue("Default");
+        sortComboBox.setOnAction(event -> applySorting());
+    }
+
+    private void applySorting() {
+        String sortOption = sortComboBox.getValue();
+
+        if ("Price: Low to High".equals(sortOption)) {
+            currentProducts.sort(Comparator.comparing(ProductItem::getPrice));
+        } else if ("Price: High to Low".equals(sortOption)) {
+            currentProducts.sort(Comparator.comparing(ProductItem::getPrice).reversed());
+        } else {
+            // Default sorting - by ID
+            currentProducts.sort(Comparator.comparing(ProductItem::getId));
+        }
+
+        displayProducts(currentProducts);
+    }
+
     private void loadAllProducts() {
         connect = database.connectDb();
 
         try {
             productsContainer.getChildren().clear();
+            currentProducts.clear();
 
             // Get all available products ordered by ID
             String sql = "SELECT * FROM medicine ORDER BY medicine_id ASC";
@@ -85,9 +121,8 @@ public class ProductsController implements Initializable, DataReceiver {
             result = prepare.executeQuery();
 
             // Store products in a list first
-            List<VBox> productBoxes = new ArrayList<>();
             while (result.next()) {
-                VBox productBox = createProductBox(
+                ProductItem product = new ProductItem(
                     result.getInt("medicine_id"),
                     result.getString("brand"),
                     result.getString("productName"),
@@ -95,22 +130,11 @@ public class ProductsController implements Initializable, DataReceiver {
                     result.getString("image"),
                     result.getString("status")
                 );
-
-                productBoxes.add(productBox);
+                currentProducts.add(product);
             }
 
-            // Add products to grid (3 columns)
-            int column = 0;
-            int row = 0;
-            for (VBox productBox : productBoxes) {
-                productsContainer.add(productBox, column, row);
-
-                column++;
-                if (column == 3) { // After 3 columns, move to next row
-                    column = 0;
-                    row++;
-                }
-            }
+            // Display products with current sorting
+            applySorting();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -138,22 +162,20 @@ public class ProductsController implements Initializable, DataReceiver {
         connect = database.connectDb();
 
         try {
-            productsContainer.getChildren().clear();
+            currentProducts.clear();
 
-            // Search products by name, brand, or type
-            String sql = "SELECT * FROM medicine WHERE LOWER(productName) LIKE ? OR LOWER(brand) LIKE ? OR LOWER(type) LIKE ?";
+            // Search products by name or brand only (not type)
+            String sql = "SELECT * FROM medicine WHERE LOWER(productName) LIKE ? OR LOWER(brand) LIKE ?";
             prepare = connect.prepareStatement(sql);
             String searchParam = "%" + searchText + "%";
             prepare.setString(1, searchParam);
             prepare.setString(2, searchParam);
-            prepare.setString(3, searchParam);
 
             result = prepare.executeQuery();
 
             // Store products in a list first
-            List<VBox> productBoxes = new ArrayList<>();
             while (result.next()) {
-                VBox productBox = createProductBox(
+                ProductItem product = new ProductItem(
                     result.getInt("medicine_id"),
                     result.getString("brand"),
                     result.getString("productName"),
@@ -161,22 +183,11 @@ public class ProductsController implements Initializable, DataReceiver {
                     result.getString("image"),
                     result.getString("status")
                 );
-
-                productBoxes.add(productBox);
+                currentProducts.add(product);
             }
 
-            // Add products to grid (3 columns)
-            int column = 0;
-            int row = 0;
-            for (VBox productBox : productBoxes) {
-                productsContainer.add(productBox, column, row);
-
-                column++;
-                if (column == 3) { // After 3 columns, move to next row
-                    column = 0;
-                    row++;
-                }
-            }
+            // Apply current sorting to search results
+            applySorting();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -188,6 +199,31 @@ public class ProductsController implements Initializable, DataReceiver {
                 if (connect != null) connect.close();
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    private void displayProducts(List<ProductItem> products) {
+        productsContainer.getChildren().clear();
+
+        // Add products to grid (3 columns)
+        int column = 0;
+        int row = 0;
+        for (ProductItem product : products) {
+            VBox productBox = createProductBox(
+                product.getId(),
+                product.getBrand(),
+                product.getProductName(),
+                product.getPrice(),
+                product.getImagePath(),
+                product.getStatus()
+            );
+            productsContainer.add(productBox, column, row);
+
+            column++;
+            if (column == 3) { // After 3 columns, move to next row
+                column = 0;
+                row++;
             }
         }
     }
@@ -265,5 +301,48 @@ public class ProductsController implements Initializable, DataReceiver {
     @Override
     public void receiveData(Object data) {
         // Handle any data passed to this controller
+    }
+
+    // Inner class to represent a product item for sorting purposes
+    private static class ProductItem {
+        private int id;
+        private String brand;
+        private String productName;
+        private double price;
+        private String imagePath;
+        private String status;
+
+        public ProductItem(int id, String brand, String productName, double price, String imagePath, String status) {
+            this.id = id;
+            this.brand = brand;
+            this.productName = productName;
+            this.price = price;
+            this.imagePath = imagePath;
+            this.status = status;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getBrand() {
+            return brand;
+        }
+
+        public String getProductName() {
+            return productName;
+        }
+
+        public double getPrice() {
+            return price;
+        }
+
+        public String getImagePath() {
+            return imagePath;
+        }
+
+        public String getStatus() {
+            return status;
+        }
     }
 }

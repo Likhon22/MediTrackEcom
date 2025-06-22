@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -40,6 +41,11 @@
                               <Font size="14.0" />
                            </font>
                         </TextField>
+                        <ComboBox fx:id="sortComboBox" prefHeight="40.0" prefWidth="200.0" promptText="Sort by..." style="-fx-font-size: 14px;">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </ComboBox>
                      </children>
                      <VBox.margin>
                         <Insets bottom="10.0" top="5.0" />

@@ -81,7 +81,7 @@ public class HomeController implements Initializable, DataReceiver {
             medicinesContainer.getChildren().clear();
 
             // Query to get the last 5 added products ordered by ID descending
-            String sql = "SELECT * FROM medicine ORDER BY id DESC LIMIT 6";
+            String sql = "SELECT * FROM medicine ORDER BY id DESC LIMIT 5";
             prepare = connect.prepareStatement(sql);
             result = prepare.executeQuery();
 
