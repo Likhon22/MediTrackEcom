@@ -1071,29 +1071,24 @@ public class dashboardController implements Initializable {
 
     public void openChatSupport() {
         try {
-            // Create a new stage for the chat window
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("admin_chat.fxml"));
-            Parent root = loader.load();
+            // Initialize the chat server manager if it's not running
+            ChatServerManager chatManager = ChatServerManager.getInstance();
+            if (!chatManager.isRunning()) {
+                chatManager.startServer();
+            }
 
-            // Get the controller to be able to properly close it later if needed
-            AdminChatController chatController = loader.getController();
+            // Show confirmation to admin
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Chat Server");
+            alert.setHeaderText("Chat Support Activated");
+            alert.setContentText("Chat server is now running. New windows will open when users connect.");
+            alert.showAndWait();
 
-            Stage chatStage = new Stage();
-            chatStage.setTitle("Admin Chat Support");
-            chatStage.setScene(new Scene(root, 1000, 700));
-            chatStage.setResizable(false);
-
-            // Add handler to stop the chat server when window is closed
-            chatStage.setOnCloseRequest(e -> chatController.shutdown());
-
-            // Show the chat window
-            chatStage.show();
-
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
-            alert.setHeaderText("Could not open chat support");
+            alert.setHeaderText("Could not start chat support");
             alert.setContentText("Error: " + e.getMessage());
             alert.showAndWait();
         }
@@ -1118,3 +1113,4 @@ public class dashboardController implements Initializable {
 
     }
 }
+

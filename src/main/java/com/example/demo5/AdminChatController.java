@@ -22,12 +22,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 public class AdminChatController implements Initializable {
 
@@ -49,82 +49,61 @@ public class AdminChatController implements Initializable {
     @FXML
     private Label userLabel;
 
-    private ServerSocket serverSocket;
     private Socket clientSocket;
     private PrintWriter writer;
     private BufferedReader reader;
-    private Thread serverThread;
     private Thread receiverThread;
-    private boolean serverRunning = false;
     private boolean connected = false;
     private String currentUser = "";
-    private final int SERVER_PORT = 5000;
+
+    // Callback for when username is identified
+    private Consumer<String> onUserIdentified;
 
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // No need to load navbar for admin chat
-        // Admin chat will be launched directly from dashboard
-
-        // Initialize chat server
-        startServer();
+        // This is now a passive controller that waits for a client connection
+        // The connection will be provided by ChatServerManager
+        statusLabel.setText("Waiting for connection...");
+        statusLabel.setTextFill(Color.web("#f39c12"));
     }
 
-    private void startServer() {
-        serverThread = new Thread(() -> {
-            try {
-                // Start the server socket
-                serverSocket = new ServerSocket(SERVER_PORT);
-                serverRunning = true;
+    /**
+     * Initialize this controller with a specific client socket
+     */
+    public void initializeWithClient(Socket socket) {
+        this.clientSocket = socket;
+        this.connected = true;
 
-                Platform.runLater(() -> {
-                    statusLabel.setText("Server running, waiting for user");
-                    statusLabel.setTextFill(Color.web("#f39c12"));
-                    addSystemMessage("Chat support server started. Waiting for users...");
-                });
+        try {
+            // Set up communication streams
+            writer = new PrintWriter(clientSocket.getOutputStream(), true);
+            reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-                // Wait for a client to connect
-                while (serverRunning) {
-                    try {
-                        clientSocket = serverSocket.accept();
+            Platform.runLater(() -> {
+                statusLabel.setText("User connected");
+                statusLabel.setTextFill(Color.web("#27ae60"));
+                addSystemMessage("User connected. Waiting for identification...");
+            });
 
-                        // Set up communication streams
-                        writer = new PrintWriter(clientSocket.getOutputStream(), true);
-                        reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            // Start receiving messages
+            startMessageReceiver();
+        } catch (IOException e) {
+            Platform.runLater(() -> {
+                statusLabel.setText("Connection error");
+                statusLabel.setTextFill(Color.web("#e74c3c"));
+                addSystemMessage("Error setting up connection: " + e.getMessage());
+            });
+            e.printStackTrace();
+        }
+    }
 
-                        connected = true;
-
-                        Platform.runLater(() -> {
-                            statusLabel.setText("User connected");
-                            statusLabel.setTextFill(Color.web("#27ae60"));
-                        });
-
-                        // Start receiving messages
-                        startMessageReceiver();
-
-                        // Only handle one client at a time for simplicity
-                        break;
-
-                    } catch (IOException e) {
-                        if (serverRunning) {
-                            System.err.println("Error accepting client connection: " + e.getMessage());
-                        }
-                    }
-                }
-
-            } catch (IOException e) {
-                Platform.runLater(() -> {
-                    statusLabel.setText("Server failed to start");
-                    statusLabel.setTextFill(Color.web("#e74c3c"));
-                    addSystemMessage("Failed to start chat server: " + e.getMessage());
-                });
-                System.err.println("Failed to start chat server: " + e.getMessage());
-            }
-        });
-
-        serverThread.setDaemon(true);
-        serverThread.start();
+    /**
+     * Set a callback for when the username is identified
+     */
+    public void setOnUserIdentified(Consumer<String> callback) {
+        this.onUserIdentified = callback;
     }
 
     private void startMessageReceiver() {
@@ -145,9 +124,6 @@ public class AdminChatController implements Initializable {
                         currentUser = "";
                     });
                     connected = false;
-
-                    // Try to restart the server to accept new connections
-                    startServer();
                 }
             }
         });
@@ -162,6 +138,11 @@ public class AdminChatController implements Initializable {
             currentUser = message.substring(5); // Remove "USER:" prefix
             userLabel.setText(currentUser);
             addSystemMessage("User " + currentUser + " connected.");
+
+            // Notify using the callback if available
+            if (onUserIdentified != null) {
+                onUserIdentified.accept(currentUser);
+            }
         } else if (message.startsWith("MSG:")) {
             // Handle regular message
             String userMsg = message.substring(4); // Remove "MSG:" prefix
@@ -251,8 +232,8 @@ public class AdminChatController implements Initializable {
         chatBox.getChildren().add(messageBox);
     }
 
-    public void stopServer() {
-        serverRunning = false;
+    // Method to be called when the window is closed
+    public void shutdown() {
         connected = false;
 
         if (clientSocket != null && !clientSocket.isClosed()) {
@@ -263,25 +244,8 @@ public class AdminChatController implements Initializable {
             }
         }
 
-        if (serverSocket != null && !serverSocket.isClosed()) {
-            try {
-                serverSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (serverThread != null) {
-            serverThread.interrupt();
-        }
-
         if (receiverThread != null) {
             receiverThread.interrupt();
         }
-    }
-
-    // Method to be called when the window is closed
-    public void shutdown() {
-        stopServer();
     }
 }
