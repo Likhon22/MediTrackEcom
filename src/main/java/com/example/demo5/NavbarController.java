@@ -48,6 +48,9 @@ public class NavbarController implements Initializable {
     private Button cartBtn;
 
     @FXML
+    private Button chatBtn;
+
+    @FXML
     private Button logoutBtn;
 
     // Cart counter components
@@ -90,6 +93,8 @@ public class NavbarController implements Initializable {
             System.out.println("User is logged in: " + getData.username);
             isLoggedIn = true;
             updateNavigation();
+            // Update cart counter immediately to show correct count on any page
+            updateCartCounter();
         } else {
             System.out.println("No user logged in");
         }
@@ -108,9 +113,11 @@ public class NavbarController implements Initializable {
         cartCounterLabel.setFont(new Font("Arial", 12));
         cartCounterLabel.setTextFill(Color.WHITE);
         cartCounterPane.getChildren().addAll(circle, cartCounterLabel);
-        cartCounterPane.setLayoutX(cartBtn.getLayoutX() + cartBtn.getWidth() - 15);
-        cartCounterPane.setLayoutY(cartBtn.getLayoutY() - 5);
-        navbar.getChildren().add(cartCounterPane);
+
+        // The positioning needs to happen after the component is rendered
+        // Add the counter to the cart button
+        cartBtn.setGraphic(new javafx.scene.layout.HBox(5, cartBtn.getGraphic(), cartCounterPane));
+
         cartCounterPane.setVisible(false);
     }
 
@@ -126,6 +133,7 @@ public class NavbarController implements Initializable {
             signupBtn.setVisible(false);
             logoutBtn.setVisible(true);
             cartBtn.setVisible(true); // Show cart button for logged-in users
+            chatBtn.setVisible(true); // Show chat button for logged-in users
             cartCounterPane.setVisible(true); // Show cart counter for logged-in users
 
             // If admin, show dashboard button
@@ -142,6 +150,7 @@ public class NavbarController implements Initializable {
             logoutBtn.setVisible(false);
             dashboardBtn.setVisible(false);
             cartBtn.setVisible(false); // Hide cart button for non-logged in users
+            chatBtn.setVisible(false); // Hide chat button for non-logged in users
             cartCounterPane.setVisible(false); // Hide cart counter for non-logged in users
         }
     }
@@ -266,6 +275,19 @@ public class NavbarController implements Initializable {
         highlightActivePage("products");
         Stage stage = (Stage) navbar.getScene().getWindow();
         SceneSwitcher.switchScene(stage, "products.fxml", "MediTrack - Products", false, null);
+    }
+
+    @FXML
+    private void navigateToChat(ActionEvent event) {
+        highlightActivePage("chat");
+        Stage stage = (Stage) navbar.getScene().getWindow();
+
+        // Navigate to the appropriate chat page based on user role
+        if (getData.isAdmin) {
+            SceneSwitcher.switchScene(stage, "admin_chat.fxml", "MediTrack - Admin Support Chat", false, null);
+        } else {
+            SceneSwitcher.switchScene(stage, "chat.fxml", "MediTrack - Chat with Support", false, null);
+        }
     }
 
     @FXML

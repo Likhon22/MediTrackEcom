@@ -20,7 +20,7 @@
    <center>
       <ScrollPane fitToWidth="true" pannable="true" prefViewportHeight="620.0" prefViewportWidth="1000.0" BorderPane.alignment="CENTER">
          <content>
-            <VBox alignment="TOP_CENTER" prefWidth="980.0" spacing="20.0" style="-fx-background-color: #f5f5f5;">
+            <VBox alignment="TOP_CENTER" prefWidth="980.0" spacing="10.0" style="-fx-background-color: #f5f5f5;">
                <children>
                   <!-- Page Title -->
                   <Label alignment="CENTER" prefHeight="30.0" prefWidth="347.0" text="Shopping Cart" textFill="#449b6d">
@@ -28,7 +28,7 @@
                         <Font name="System Bold" size="24.0" />
                      </font>
                      <VBox.margin>
-                        <Insets top="5.0" bottom="0.0" />
+                        <Insets bottom="10.0" top="5.0" />
                      </VBox.margin>
                   </Label>
 
@@ -45,14 +45,14 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <Button mnemonicParsing="false" onAction="#navigateToProducts" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: linear-gradient(to right, #449b6d, #633364); -fx-text-fill: white; -fx-background-radius: 20;" text="Browse Products">
+                        <Button mnemonicParsing="false" onAction="#navigateToProducts" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: linear-gradient(to right, #449b6d, #633364); -fx-text-fill: white; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 5); -fx-cursor: hand;" text="Browse Products">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Button>
                      </children>
                      <VBox.margin>
-                        <Insets bottom="20.0" top="30.0" />
+                        <Insets bottom="10.0" top="10.0" />
                      </VBox.margin>
                   </VBox>
 
@@ -179,7 +179,7 @@
                                  </children>
                               </HBox>
 
-                              <Button fx:id="checkoutButton" mnemonicParsing="false" onAction="#checkout" prefHeight="50.0" prefWidth="280.0" style="-fx-background-color: linear-gradient(to right, #449b6d, #633364); -fx-text-fill: white; -fx-background-radius: 25; -fx-cursor: hand;" text="Proceed to Checkout">
+                              <Button fx:id="checkoutButton" mnemonicParsing="false" onAction="#checkout" prefHeight="50.0" prefWidth="280.0" style="-fx-background-color: linear-gradient(to right, #449b6d, #633364); -fx-text-fill: white; -fx-background-radius: 25; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 5);" text="Proceed to Checkout">
                                  <font>
                                     <Font name="System Bold" size="16.0" />
                                  </font>
@@ -188,7 +188,7 @@
                                  </VBox.margin>
                               </Button>
 
-                              <Button fx:id="continueShoppingButton" mnemonicParsing="false" onAction="#navigateToProducts" prefHeight="40.0" prefWidth="280.0" style="-fx-background-color: transparent; -fx-text-fill: #633364; -fx-border-color: #633364; -fx-border-radius: 20; -fx-cursor: hand;" text="Continue Shopping">
+                              <Button fx:id="continueShoppingButton" mnemonicParsing="false" onAction="#navigateToProducts" prefHeight="40.0" prefWidth="280.0" style="-fx-background-color: transparent; -fx-text-fill: #633364; -fx-border-color: #633364; -fx-border-radius: 20; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 3, 0, 0, 3);" text="Continue Shopping">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
@@ -203,8 +203,11 @@
                         </VBox>
                      </children>
                      <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="0.0" />
                      </padding>
+                     <VBox.margin>
+                        <Insets top="0.0" />
+                     </VBox.margin>
                   </HBox>
 
                   <!-- Footer Section -->

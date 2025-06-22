@@ -83,6 +83,12 @@
                               <Font size="14.0" />
                            </font>
                         </Button>
+                        <!-- Chat Support Button -->
+                        <Button fx:id="chat_support_btn" layoutX="46.0" layoutY="331.0" mnemonicParsing="false" onAction="#openChatSupport" prefHeight="33.0" prefWidth="143.0" style="-fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 14; -fx-text-fill: #fff; -fx-alignment: CENTER-LEFT;" text="Chat Support" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
                         <ImageView fitHeight="21.0" fitWidth="27.0" layoutX="20.0" layoutY="238.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../../images/dashboard.png" />
@@ -96,6 +102,11 @@
                         <ImageView fitHeight="21.0" fitWidth="27.0" layoutX="20.0" layoutY="304.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../../images/purchaseMedi.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="21.0" fitWidth="27.0" layoutX="20.0" layoutY="337.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../images/users.png" />
                            </image>
                         </ImageView>
                         <Button fx:id="logout" layoutX="13.0" layoutY="503.0" mnemonicParsing="false" onAction="#logout" style="-fx-background-color: linear-gradient(to bottom right, #449b6d,#633364); -fx-border-width: 1; -fx-border-color: white;" text="Logout" textFill="#f2f0f0">

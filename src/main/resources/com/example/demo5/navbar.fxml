@@ -91,7 +91,7 @@
                         <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                      </padding>
                   </Button>
-                  <Button fx:id="cartBtn" mnemonicParsing="false" onAction="#navigateToCart" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="Cart" visible="false">
+                  <Button fx:id="cartBtn" mnemonicParsing="false" onAction="#navigateToCart" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"  visible="false">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -105,6 +105,14 @@
                            </image>
                         </ImageView>
                      </graphic>
+                  </Button>
+                  <Button fx:id="chatBtn" mnemonicParsing="false" onAction="#navigateToChat" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="Chat" visible="false">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                     </padding>
                   </Button>
                   <Button fx:id="logoutBtn" mnemonicParsing="false" onAction="#logout" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="Logout" visible="false">
                      <font>
